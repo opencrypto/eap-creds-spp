@@ -412,8 +412,8 @@
 	            mechanism (e.g., EAP-TLS, EAP-TEAP, EAP-TTLS, etc.), the server MAY
 	            decide to start a credentials management session. In order to do that,
 	            the Server sends an EAP-Request/EAP-CREDS(Type=Init) message to the Peer with
-	            one ('Phase-Control') TLV with the 'S' bit set to '1' and the value set
-	            to '1' (thus indicating the beginning of Phase One). Also, the Server
+	            the 'Phase' field sets to '0x01'. The 'S' bit also needs to be set to '1',
+	            which indicates this message is the beginning of Phase One. Also, the Server
 	            MAY use one or more ('Version') TLVs to indicate the supported versions.
 	          </t>
 	          <t>
@@ -477,8 +477,9 @@
 	            (b) start phase one again by sending a new ('EAP-CREDS-Init') message
 	            that will also carry an ERROR TLV that provides the Peer with the
 	            reason the initial response was not acceptable. In this case, the
-	            ('Phase-Control') TLV MUST be omitted since it is not the first message of 
-	            phase one. The server and the peer can repeat phase one until they reach
+	            'Phase' field MUST be omitted since it is not the first message of 
+	            phase one (see <xref target="phase_transitioning" />). The server and the peer 
+		    can repeat phase one until they reach
 	            an agreement or the session is terminated by the Server.
 	          </t>
 	        </list>
@@ -2470,9 +2471,9 @@
                 ('EAP-CREDS-Validate') message for the Peer where it encodes all the required details
                 for starting the validation process.
                 In particular, the server sends the ('Credentials-Info'), a ('Challenge'),
-                and the ('Phase-Control') TLVs in a EAP-Request/EAP-CREDS(Type=Validate) message.
-                The ('Phase-Control') TLV should carry the '1' value for the 'S' bit (Start) and the
-                number '3' for its value (Phase Three begins).
+                in a EAP-Request/EAP-CREDS(Type=Validate) message.
+                The 'S' bit (Start) should set the '1' for its value (Phase Three starts)
+		and the 'Phase' field sets to '0x03'.
             </t>
             <t>
                 The Peer generates the answer to the Challenge and sends back a EAP-Response/EAP-CREDS(Type=Validate)
@@ -2483,9 +2484,8 @@
                 to the ('Challenge-Response') TLV in its reply.
             </t>
             <t>
-                Finally, in the last message, the Server (if Phase Three is to be ended) SHALL include
-                the ('Phase-Control') TLV with the 'S' bit set to '0' (end of phase) and the value set
-                to '3' (Phase Three ended).
+                Finally, in the last message, the Server (if Phase Three is to be ended) SHALL set
+                the 'S' bit to '0' (end of phase) and the value of 'Phase' field set to '0x03'.
             </t>
             <t>
                 At this point, EAP-CREDS has terminated all possible operations and can be terminated.
