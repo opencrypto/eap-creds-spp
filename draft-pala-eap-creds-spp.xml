@@ -390,8 +390,8 @@
 	   |        Outer Tunnel Established        |               
 	   | <-------------------------------------->               
 	   |                                        |               
-	   |  [1] EAP-Request/EAP-CREDS(Type=Init)  |  ,---------!. 
-	   |      { [ Version+ ], [ Challenge ] }   |  |Phase One|_\
+	   | [1] EAP-Request/EAP-CREDS(Type=Init)   |  ,---------!. 
+	   | { [ Version+ ], [ Challenge-Data ] }   |  |Phase One|_\
 	   | <---------------------------------------  |Begins     |
 	   |                                        |  `-----------'
 	   | [2] EAP-Response/EAP-CREDS(Type=Init)  |               
@@ -421,6 +421,11 @@
 	            by adding one or more ('Version') TLVs. If no ('Version') TLV is added
 	            to the message, the Peer SHOULD assume the supported version is 1 ('0x1').
 	          </t>
+            <t>
+              Optionally, the Server MAY also send a ('Challenge-Data') TLV which includes
+              chanllenge data value (usually some random value) and a specified challenge 
+              type, which indicates how the Peer MUST 
+            </t>
 	        </list>
 	      </t>
 	      <t>[2] The Peer sends EAP-Response/EAP-CREDS(Type=Init)
@@ -603,7 +608,7 @@
 	|EAP Peer|                                |EAP Server|           
 	`---+----'                                `----+-----'           
 	 | [1] EAP-Request/EAP-CREDS(Type=Validate) |  ,-----------!. 
-	 |     { Cred-Info, Challenge }             |  |Phase Three|_\
+	 |     { Cred-Info, Challenge-Data }        |  |Phase Three|_\
 	 | <-----------------------------------------  |Begins       |
 	 |                                          |  `-------------'
 	 | [2] EAP-Response/EAP-CREDS(Type=Validate)|  ,-----------!. 
@@ -1109,7 +1114,7 @@
           <t>3 octets</t>
         </list>
     	</t>
-    	<t>Challenge Type (uint8)
+    	<t>Challenge Type (uint8).
       	<list>
         	<t>
 	          This field carries the type of Challenge. In particular, the challenge
@@ -2470,17 +2475,17 @@
                 After Phase One (and/or Phase Two) ends, the Server MAY start phase three by issuing an
                 ('EAP-CREDS-Validate') message for the Peer where it encodes all the required details
                 for starting the validation process.
-                In particular, the server sends the ('Credentials-Info'), a ('Challenge'),
+                In particular, the server sends the ('Credentials-Info'), a ('Challenge-Data'),
                 in a EAP-Request/EAP-CREDS(Type=Validate) message.
-                The 'S' bit (Start) should set the '1' for its value (Phase Three starts)
-		and the 'Phase' field sets to '0x03'.
+                The 'S' bit (Start) should set the '1' for its value and the 'Phase' field sets to '0x03'
+                (Phase Three starts).
             </t>
             <t>
                 The Peer generates the answer to the Challenge and sends back a EAP-Response/EAP-CREDS(Type=Validate)
                 message with the ('Challenge-Response') and an optional ('Challenge') field (only for
                 server-side validation of the symmetric credentials). If the Peer requested server-side
                 validation of the credentials, the Server MUST include (if a symmetric secret) the
-                response to the Peer-issued ('Challenge') TLV by computing the response and adding it
+                response to the Peer-issued ('Challenge-Data') TLV by computing the response and adding it
                 to the ('Challenge-Response') TLV in its reply.
             </t>
             <t>
