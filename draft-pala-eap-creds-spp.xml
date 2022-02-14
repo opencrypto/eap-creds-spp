@@ -424,7 +424,7 @@
             <t>
               Optionally, the Server MAY also send a ('Challenge-Data') TLV which includes
               chanllenge data value (usually some random value) and a specified challenge 
-              type, which indicates how the Peer MUST 
+              type, which indicates the type Peer MUST use for calculating the ('Challenge-Response') TLV.
             </t>
 	        </list>
 	      </t>
@@ -602,7 +602,7 @@
 	      <t>
 	        The following figure provides the message flow for Phase 3:
 	      </t>
-	<figure title="EAP-CREDS Phase Three Message Flow"><artwork><![CDATA[
+	<figure title="EAP-CREDS Phase Three Message Flow (Basic)"><artwork><![CDATA[
 
 	,--------.                                ,----------.           
 	|EAP Peer|                                |EAP Server|           
@@ -619,9 +619,12 @@
 
 	]]></artwork></figure>
 	      <t>
-	        Phase three is optional and it is used by the server to request the client to
+	        Phase three is optional and it is usually used by the server to request the client to
 	        validate (proof) that the new credentials have been installed correctly
-	        before issuing the final Success message.
+	        before issuing the final Success message. 
+          However, it is also possible for the Peer to request the server-side validation for 
+          symmetric credentials. The message flow and diagram of the server-side validation is listed below
+          in this section. 
 	      </t>
 	      <t>
 	          <list>
@@ -651,8 +654,7 @@
 	          </t>
 	        </list>
 	      </t>
-	      <t>
-	      	[2] The Peer sends EAP-Response/EAP-CREDS(Type=Validate)
+	      <t>[2] The Peer sends EAP-Response/EAP-CREDS(Type=Validate)
 	        <list>
 	          <t>
 	            When the client receives the Validate message from the server, it calculates the
@@ -707,15 +709,77 @@
 	          <t>
 	            The initial values for the type of challenges are described in the <xref target="eap_creds_challenge_types" />. Other types of challenges MAY be defined according
 	            to the specified procedures.
-	          </t>
-	          
-	          <t>
-	            In case of issues with the validation of newly deployed credentials, both
-	            the Server and the Peer should consider those credentials invalid (or
-	            unusable) and should issue the required failure message(s).
-	          </t>
+	          </t>         
 	        </list>
 	      </t>
+  <figure title="EAP-CREDS Phase Three Message Flow (Server-side Validation)"><artwork><![CDATA[
+
+
+    
+	,--------.                                ,----------.           
+	|EAP Peer|                                |EAP Server|           
+	`---+----'                                `----+-----'           
+	 | [1] EAP-Request/EAP-CREDS(Type=Validate) |  ,-----------!. 
+	 |     { Cred-Info, Challenge-Data }        |  |Phase Three|_\
+	 | <-----------------------------------------  |Begins       |
+	 |                                          |  `-------------'
+	 | [2] EAP-Response/EAP-CREDS(Type=Validate)|   
+	 |  { Challenge-Response, Challenge-Data }  |  
+	 | ----------------------------------------->  
+	 |                                          |  
+	 | [3] EAP-Response/EAP-CREDS(Type=Validate)|  ,-----------!.             
+	 |     { Challenge-Response }               |  |Phase Three|_\              
+	 | <----------------------------------------|  |Ends         |
+	 |                                          |  `-------------'
+
+  ]]></artwork></figure>
+      <t>[1] The Server sends EAP-Request/EAP-CREDS(Type=Validate)
+	      <list>
+	          <t>
+	            In order to start Phase Three, the Server sends an
+	            EAP-Request/EAP-CREDS(Type=Validate) message to the Peer.
+	            The Server MUST include the ('Credentials-Info') TLV to provide the indication about
+	            which set of credentials the Server intends to validate. The Server MUST also include a randomly generated challenge in the message to the client. The type of challenge
+	            determines how the ('Challenge-Response') is calculated. EAP-CREDS defines the
+	            asymmetric and symmetric challenges in <xref target="eap_creds_challenge_types" />
+	            and others can be defined according to the specified rules.
+	          </t>
+	          <t>
+	            As usual, the Server MUST set, in the headers, the 'S' bit to '1' in its first
+	            message of Phase Three and the 'Phase' value shall be set to '3'
+	            (beginning of Phase Three).
+	          </t>
+        </list>
+        </t>
+	      <t>[2] The Peer sends EAP-Response/EAP-CREDS(Type=Validate)
+	        <list>
+	          <t>
+	            When the client receives the Validate message from the server, it calculates the
+	            response to the challenge and sends the response back to the server in a
+	            EAP-Response/EAP-CREDS(Type=Validate) message. Besides, the Peer MAY include ('Challenge-Data')
+              TLV for the server-side validation.           
+            </t>
+          </list>
+        </t> 
+        <t>[3] The Server sends EAP-Request/EAP-CREDS(Type=Validate)
+	        <list>
+	          <t>
+	            When the Server receives the response message from the Peer with ('Challenge-Data') included,
+              the Server MUST include (if a symmetric secret) the response to the Peer-issued 
+              ('Challenge-Data') TLV by computing the response and adding it to the ('Challenge-Response') 
+              TLV in its reply.        
+            </t>
+            <t>
+                Finally, in the last message, the Server (if Phase Three is to be ended) SHALL set
+                the 'S' bit to '0' (end of phase) and the value of 'Phase' field set to '0x03'.
+            </t>
+          </list>
+        </t>
+        <t>
+          In case of issues with the validation of newly deployed credentials, both
+          the Server and the Peer should consider those credentials invalid (or
+          unusable) and should issue the required failure message(s).
+        </t>
 	  	</section>
 
 	  </section> 
@@ -3329,6 +3393,3 @@
 
 </back>
 </rfc>
-
-
-
