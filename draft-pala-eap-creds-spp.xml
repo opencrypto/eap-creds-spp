@@ -395,11 +395,11 @@
 	   | <---------------------------------------  |Begins     |
 	   |                                        |  `-----------'
 	   | [2] EAP-Response/EAP-CREDS(Type=Init)  |               
-	   |     { Protocol+, [ Encoding+ ],        |               
-	   |       [ Format+ ] , [  Version  ]      |  ,---------!. 
-	   |       [ Creds-Info+ ], [ Storage-Info ]|  |Phase One|_\
-	   |       [ Net-Usage], [ Token ],         |  |Ends       |
-	   |       [ Challenge-Rsp ], [ Profile+ ] }|  `-----------'
+	   |     { [Version], [ Protocols+ ],       |               
+	   |       [ Creds-Info+ ], [ Encoding+ ]   |  ,---------!. 
+	   |       [ Format+ ], [ Token-Data ]      |  |Phase One|_\
+	   |       [ Profile+ ], [ Challenge-Rsp ]  |  |Ends       |
+	   |       [ Storage-Info ],[ Net-Usage] }  |  `-----------'
 	   | --------------------------------------->               
 	   |                                        |               
 	   |                                        |               
@@ -437,16 +437,15 @@
 	            not include the ('Version') TLV, the Server MUST use the most recent
 	            supported version of EAP-CREDS. Moreover, the Server includes one or
 	            more ('Protocol') TLVs to indicate the list of supported provisioning
-	            protocols, followed by one ('Credentials-Info') TLVs for each installed
-	            credentials to provide their status to the server (i.e., if multiple
+	            protocols, followed by one or more ('Credentials-Info') TLVs for each installed
+	            credential to provide their status to the server (i.e., if multiple
 	            credentials are configured on the Peer for this Network, then the Peer
 	            MUST include one ('Credentials-Info') TLV for each of them).
 	          </t>
 	          <t>
 	            The Peer also provides the list of supported Encodings and Formats
-	            by adding one or more ('Supported-Encodings') and ('Supported-Formats')
-	            TLVs. The Peer MAY also provide the Server with information about the
-	            Peer's credentials storage by using the 'Storage-Status' TLV.
+	            by adding one or more ('Encodings') and ('Formats')
+	            TLVs.
 	          </t>
 	          <t>
 	            When there are no abailable credentials, the Peer MAY include an authorization
@@ -469,9 +468,9 @@
 	          <t>
 	            Ultimately, the Peer MAY include additional metadata regarding the status of
 	            the Peer. To this end, the Peer can use a ('Storage-Info') TLV to provide the server
-	            with additional data about the Peer's capabilities and resources. Also, the
-	            ('Network-Usage') TLV can be used to provide the Server with the indication of
-	            which network resources are needed by the Peer and what is its intended
+	            with additional data about the Peer's capabilities and resources (e.g., credentials 
+              storage). Also, the ('Network-Usage') TLV can be used to provide the Server with the 
+              indication of which network resources are needed by the Peer and what is its intended
 	            utilization pattern(s).
 	          </t>
 	          <t>
@@ -484,15 +483,15 @@
 	            reason the initial response was not acceptable. In this case, the
 	            'Phase' field MUST be omitted since it is not the first message of 
 	            phase one (see <xref target="phase_transitioning" />). The server and the peer 
-		    can repeat phase one until they reach
-	            an agreement or the session is terminated by the Server.
+		          can repeat phase one until they reach an agreement or the session is terminated 
+              by the Server.
 	          </t>
 	        </list>
 	      </t>
 	      <t>
 	        <list>
 	          <t>
-	            NOTE WELL: The determination of the need to start phase two or not is based on the
+	            NOTE WELL: The determination of the need to start Phase Two or not is based on the
 	            contents of the ('Credentials-Info') TLV sent by the Peer (e.g., a credential
 	            is about to expire or a credential is simply missing).
 	          </t>
@@ -2157,7 +2156,7 @@
     </t>
     </section>
 
-    <section anchor="tlv_suppoorted_formats" title="The Supported-Formats TLV">
+    <section anchor="tlv_suppoorted_formats" title="The Formats TLV">
 
       <figure><artwork><![CDATA[
 
@@ -2361,7 +2360,7 @@
                 <t>
                     The first message from the server is the one that starts Phase One, therefore
                     the Server MUST set the headers' 'S' bit to '1' (Start) and the headers' 'Phase' value
-                    to '1' (Phase One).
+                    to '0x01' (Phase One).
                 </t>
                 <t>
                     The Server uses one or more ('Version') TLVs in the EAP-Request/EAP-CREDS(Type=Init)
@@ -2480,12 +2479,12 @@
                 Provisioning-Data, Token-Data, and Error.
             </t>
             <t>
-                After the exchange of phase one messages, the Server
+                After the exchange of Phase One messages, the Server
                 MAY start phase two by issuing an ('EAP-CREDS-Provisioning') message for the Peer
                 where it encodes all the required details for starting the provisioning process.
                 In particular, the server sends the selected ('Action'), ('Protocol'), and metadata
                 to the client in a EAP-Request/EAP-CREDS(Type=Provisioning) message.
-                The header's 'S' bit MUST be set to '1' (Start) and the 'Phase' value set to '2'
+                The header's 'S' bit MUST be set to '1' (Start) and the 'Phase' value set to '0x02'
                 (Phase Two begins).
             </t>
             <t>
