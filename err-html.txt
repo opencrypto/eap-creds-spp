@@ -1,16 +1,2 @@
-Warning: /usr/lib/python3/dist-packages/xml2rfc/templates/rfc2629-xhtml.ent is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.
-Warning: /usr/lib/python3/dist-packages/xml2rfc/templates/rfc2629-other.ent is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.
-Warning: /usr/lib/python3/dist-packages/xml2rfc/templates/rfc2629-xhtml.ent is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.
-Warning: /usr/lib/python3/dist-packages/xml2rfc/templates/rfc2629-other.ent is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.
-Warning: /usr/lib/python3/dist-packages/xml2rfc/templates/rfc2629-xhtml.ent is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.
-Warning: /usr/lib/python3/dist-packages/xml2rfc/templates/rfc2629-other.ent is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.
-Warning: /usr/lib/python3/dist-packages/xml2rfc/templates/rfc2629-xhtml.ent is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.
-Warning: /usr/lib/python3/dist-packages/xml2rfc/templates/rfc2629-other.ent is no longer needed as the special processing of non-ASCII characters has been superseded by direct support for non-ASCII characters in RFCXML.
-/home/grimer/project/eap-creds-spp/eap-creds-spp/draft-pala-eap-creds-spp.xml(88): Warning: Deprecated <vspace/> element removed, but no good conversion found  The output will most likely need fixup.
-/home/grimer/project/eap-creds-spp/eap-creds-spp/draft-pala-eap-creds-spp.xml(101): Warning: Deprecated <vspace/> element removed, but no good conversion found  The output will most likely need fixup.
-/home/grimer/project/eap-creds-spp/eap-creds-spp/draft-pala-eap-creds-spp.xml(128): Warning: Deprecated <vspace/> element removed, but no good conversion found  The output will most likely need fixup.
-/home/grimer/project/eap-creds-spp/eap-creds-spp/draft-pala-eap-creds-spp.xml(134): Warning: Deprecated <vspace/> element removed, but no good conversion found  The output will most likely need fixup.
-/home/grimer/project/eap-creds-spp/eap-creds-spp/draft-pala-eap-creds-spp.xml(162): Warning: Deprecated <vspace/> element removed, but no good conversion found  The output will most likely need fixup.
-/home/grimer/project/eap-creds-spp/eap-creds-spp/draft-pala-eap-creds-spp.xml(181): Warning: Deprecated <vspace/> element removed, but no good conversion found  The output will most likely need fixup.
-/home/grimer/project/eap-creds-spp/eap-creds-spp/draft-pala-eap-creds-spp.xml(25): Warning: Setting consensus="true" for IETF STD document (this is not the schema default, but is the only value permitted for this type of document)
- Created file draft-pala-eap-creds-spp-02.html
+/home/grimer/project/eap-creds-spp/eap-creds-spp/draft-pala-tian-eap-creds-spp.xml(8): Warning: Setting consensus="true" for IETF STD document (this is not the schema default, but is the only value permitted for this type of document)
+ Created file draft-pala-tian-eap-creds-spp-02.html
